@@ -8,22 +8,24 @@ import {
   XIcon,
   HomeIcon,
   DocumentSearchIcon,
-  FireIcon,
+  SupportIcon,
   ChatAlt2Icon,
+  LightBulbIcon
 } from "@heroicons/react/outline";
 import { SearchIcon, SelectorIcon } from "@heroicons/react/solid";
 import { ToastContainer } from 'react-toastify';
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
-  { name: "Incidents", href: "/incidents", icon: DocumentSearchIcon },
-  { name: "Problem Management", href: "/problem", icon: FireIcon },
   { name: "Tickets", href: "/ticket", icon: ChatAlt2Icon },
+  { name: "Incidents", href: "/incidents", icon: DocumentSearchIcon },
+  { name: "Problems", href: "/problems", icon: SupportIcon },
+  { name: "Root Cause", href: "/rca", icon: LightBulbIcon },
 ];
 const teams = [
-  { name: "Engineering", href: "#", bgColorClass: "bg-indigo-500" },
-  { name: "Human Resources", href: "#", bgColorClass: "bg-green-500" },
-  { name: "Customer Success", href: "#", bgColorClass: "bg-yellow-500" },
+  { name: "IPR", href: "#", bgColorClass: "bg-indigo-500" },
+  { name: "ENG", href: "#", bgColorClass: "bg-green-500" },
+  { name: "AUD", href: "#", bgColorClass: "bg-yellow-500" },
 ];
 
 function classNames(...classes) {
