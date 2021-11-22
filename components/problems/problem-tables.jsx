@@ -1,56 +1,39 @@
-import { Fragment } from "react"
-import { Menu, Transition } from "@headlessui/react"
 import {
-  DotsVerticalIcon,
-  PencilAltIcon,
   EyeIcon,
   ChevronDoubleUpIcon,
   ChevronUpIcon,
   ChevronRightIcon,
-  ChevronDownIcon
-} from "@heroicons/react/solid"
-import { useState, useMemo } from "react"
-import format from "date-fns/format"
+  ChevronDownIcon,
+} from "@heroicons/react/solid";
+import { useState, useMemo } from "react";
+import format from "date-fns/format";
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(" ")
-}
-
-function formatDate(date) {
-  const setFormat = new Intl.DateTimeFormat("en-US", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false
-  });
-
-  return setFormat.format(new Date(date));
+  return classes.filter(Boolean).join(" ");
 }
 
 const ProblemTables = ({ problems }) => {
-  const itemsPerPage = 10
-  const [page, setPage] = useState(1)
+  const itemsPerPage = 10;
+  const [page, setPage] = useState(1);
   const displayData = useMemo(() => {
-    const start = (page - 1) * itemsPerPage
-    return problems.data.slice(start, start + itemsPerPage)
-  }, [problems])
-  let nomor = 1
-  
+    const start = (page - 1) * itemsPerPage;
+    return problems.data.slice(start, start + itemsPerPage);
+  }, [problems]);
+  let nomor = 1;
+
   function renderPriority(problem) {
-    if (problem.idPriorityMatrix in [1, 2, 4]) {
+    if (problem.idPriorityMatrix == 1) {
       // ini icon Critical
-      return <ChevronDoubleUpIcon className=" w-6 h-auto text-red-600" />
-    } else if (problem.idPriorityMatrix in [3, 5, 7]) {
+      return <ChevronDoubleUpIcon className=" w-6 h-auto text-red-600" />;
+    } else if (problem.idPriorityMatrix ==  3) {
       // ini icon High
-      return <ChevronUpIcon className=" w-6 h-auto text-yellow-600" />
-    } else if (problem.idPriorityMatrix in [6, 8]) {
+      return <ChevronUpIcon className=" w-6 h-auto text-yellow-600" />;
+    } else if (problem.idPriorityMatrix == 6) {
       // ini icon Medium
-      return <ChevronRightIcon className=" w-6 h-auto text-blue-600" />
+      return <ChevronRightIcon className=" w-6 h-auto text-blue-600" />;
     } else {
       // ini icon Low
-      return <ChevronDownIcon className=" w-6 h-auto text-green-600" />
+      return <ChevronDownIcon className=" w-6 h-auto text-green-600" />;
     }
   }
 
@@ -109,9 +92,7 @@ const ProblemTables = ({ problems }) => {
             <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Latest Progress
             </th>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              
-            </th>
+            <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-100">
@@ -125,7 +106,7 @@ const ProblemTables = ({ problems }) => {
               <td className="px-6 py-3 text-sm text-gray-500 font-normal">
                 {renderPriority(problem)}
                 <span className="px-2 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                  {problem.source}
+                  {problem.rootCause.source}
                 </span>
               </td>
               <td className="px-6 py-3 text-sm text-gray-500 font-normal">
@@ -135,13 +116,13 @@ const ProblemTables = ({ problems }) => {
                       ? problem.incident.incidentNumber
                       : "Tidak ada Incident"}
                   </a>
-                  {` | PR-${problem.id}-${formatDate(problem.createdAt)}`}
+                  {` | PR-${problem.id}-${format(new Date(problem.createdAt), 'MMddyy')}`}
                 </div>
                 <div className="text-base text-gray-900">
                   {problem.problemName}
                 </div>
                 <div className="text-xs text-gray-500">
-                  {formatDate(problem.createdAt)}
+                  {format(new Date(problem.createdAt), 'd LLLL yyyy hh:mm')}
                 </div>
               </td>
               <td className="px-6 py-3 text-sm text-gray-500 font-normal">
@@ -155,16 +136,27 @@ const ProblemTables = ({ problems }) => {
               </td>
               <td className="px-6 py-3 text-sm text-gray-500 font-normal">
                 <div className="text-sm text-gray-900">
-                  {problem.userProfile.fullname}
+                  {/* {problem.userProfile.fullname} */}uhuy
                 </div>
                 <div className="text-xs text-gray-500">{problem.status}</div>
               </td>
               <td className="px-6 py-3 text-sm text-gray-500 font-normal w-1/5">
                 progress nich
               </td>
-
+              <td>
+                <a
+                  href={`/problems/${problem.id}`}
+                  className="bg-gray-100 text-gray-900"
+                >
+                  <EyeIcon
+                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  View
+                </a>
+              </td>
               {/* Begin ofMenu Option */}
-              <td className="pr-6">
+              {/* <td className="pr-6">
                 <Menu
                   as="div"
                   className="relative flex justify-end items-center"
@@ -239,7 +231,7 @@ const ProblemTables = ({ problems }) => {
                     </>
                   )}
                 </Menu>
-              </td>
+              </td> */}
               {/* End of Menu Option */}
             </tr>
           ))}
@@ -247,6 +239,6 @@ const ProblemTables = ({ problems }) => {
       </table>
     </>
   );
-}
+};
 
-export default ProblemTables
+export default ProblemTables;

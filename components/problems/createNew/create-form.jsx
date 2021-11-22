@@ -9,9 +9,15 @@ const CreateForm = () => {
       'http://127.0.0.1:3030/v1/probman/problem',
       {
         body: JSON.stringify({
+          idApps: event.target.idApps.value,
           idIncident: event.target.idIncident.value,
           tanpaIncident: event.target.tanpaIncident.value,
           problemName: event.target.problemName.value,
+          rootCause: event.target.rootCause.value,
+          impact: event.target.impact.value,
+          description: event.target.description.value,
+          workAround: event.target.workAround.value,
+          proposedEnhancement: event.target.proposedEnhancement.value,
         }),
         headers: {
           'Content-Type': 'application/json'
@@ -27,7 +33,7 @@ const CreateForm = () => {
   return (
     <>
       <div className="bg-gray-50">
-        <div className="mx-auto py-2 px-4 sm:py-2 sm:px-6 lg:px-8">
+        <div className="mx-auto py-2 px-8 sm:py-2 sm:px-8 lg:px-8">
           <div className="mx-auto divide-y-2 divide-gray-200">
             <form onSubmit={createProblem}>
               <div className="space-y-8 divide-y divide-gray-200">
@@ -144,8 +150,8 @@ const CreateForm = () => {
                     </label>
                     <div className="mt-1">
                       <textarea
-                        id="workaround"
-                        name="workaround"
+                        id="workAround"
+                        name="workAround"
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                         type="text"
                       />

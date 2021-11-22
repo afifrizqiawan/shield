@@ -47,6 +47,7 @@ function SelectFilterApps() {
   return (
     <Select
       key={application}
+      id="idApps"
       name="idApps"
       value={application}
       options={options}
