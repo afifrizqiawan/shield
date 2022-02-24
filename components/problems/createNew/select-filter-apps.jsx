@@ -16,7 +16,7 @@ function SelectFilterApps() {
         const selectValue = result.data.map((data) => ({
           id: data.id,
           value: data.id,
-          label: `${data.subName} . ${data.appGroup} . ${data.criticalityApp} `,
+          label: `${data.subName}`,
         }))
 
         setOptions(selectValue)
@@ -31,7 +31,6 @@ function SelectFilterApps() {
   const handleOnchange = (chosenValue) => {
     const item = chosenValue === null ? "" : chosenValue // untuk menghandle nilai null
     setApplication(item)
-    // setFilter(item.value || undefined)
   }
 
   // custom style untuk menghilangkan outline pada saat search input

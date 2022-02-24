@@ -4,9 +4,9 @@ import {
   useGlobalFilter,
   useFilters,
   usePagination,
-} from "react-table"
-import { classNames } from "../utils"
-import { SortIcon, SortUpIcon, SortDownIcon } from "../ui/short-icon"
+} from "react-table";
+import { classNames } from "../utils";
+import { SortIcon, SortUpIcon, SortDownIcon } from "../ui/short-icon";
 
 function ProblemTables({ columns, data }) {
   const {
@@ -24,19 +24,20 @@ function ProblemTables({ columns, data }) {
     pageOptions,
     prepareRow,
     state,
-  } = useTable({ columns, data }, useFilters, useSortBy, usePagination)
+  } = useTable({ columns, data }, useFilters, useSortBy, usePagination);
 
-  const { pageIndex, pageSize } = state
+  const { pageIndex, pageSize } = state;
 
   return (
     <>
       <table {...getTableProps()} className="min-w-full">
         <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+          {headerGroups.map((headerGroup, i) => (
+            <tr key={`row-problem-${i}`} {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 // <th {...column.getHeaderProps(column.getSortByToggleProps())} className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <th
+                  key={`col-problem-${i}`}
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   className={classNames(
                     "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
@@ -68,27 +69,28 @@ function ProblemTables({ columns, data }) {
           {...getTableBodyProps()}
           className="bg-white divide-y divide-gray-100"
         >
-          {page.map((row) => {
-            prepareRow(row)
+          {page.map((row, i) => {
+            prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr key={`cell-problem-${i}`} {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
                     <td
+                      key={`data-problem-${i}`}
                       {...cell.getCellProps()}
                       className="px-6 py-3 text-sm text-gray-500 font-normal"
                     >
                       {cell.render("Cell")}
                     </td>
-                  )
+                  );
                 })}
               </tr>
-            )
+            );
           })}
         </tbody>
       </table>
     </>
-  )
+  );
 }
 
-export default ProblemTables
+export default ProblemTables;

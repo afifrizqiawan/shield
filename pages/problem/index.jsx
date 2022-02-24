@@ -1,43 +1,49 @@
-import Head from "next/head"
-import Layout from "../../components/layout"
-import PageHeader from "../../components/problems/page-header"
-import CardHeader from "../../components/problems/card-header"
-import ProblemTables from "components/problems/problem-tables"
-import { EyeIcon } from "@heroicons/react/solid"
-import { useMemo } from "react"
-import format from "date-fns/format"
-import { PriorityArrow, SourcePill, StatusPill, StatusText, StatusIncident } from "../../components/problems/status-badge"
-import withSession from "../../lib/session"
+import Head from "next/head";
+import Layout from "../../components/layout";
+import PageHeader from "../../components/problems/page-header";
+import CardHeader from "../../components/problems/card-header";
+import ProblemTables from "components/problems/problem-tables";
+import { EyeIcon } from "@heroicons/react/solid";
+import { useMemo } from "react";
+import format from "date-fns/format";
+import {
+  PriorityArrow,
+  SourcePill,
+  StatusPill,
+  StatusText,
+  StatusIncident,
+} from "../../components/problems/status-badge";
+import withSession from "../../lib/session";
 import {
   DocumentAddIcon,
   PuzzleIcon,
   SparklesIcon,
   BadgeCheckIcon,
-} from "@heroicons/react/outline"
+} from "@heroicons/react/outline";
 
 export const getServerSideProps = withSession(async function ({ req, res }) {
-  const user = req.session.get("user")
+  const user = req.session.get("user");
   if (!user) {
     return {
       redirect: {
         destination: "/auth",
         permanent: false,
       },
-    }
+    };
   }
 
   const resAllJoin = await fetch(
     "http://127.0.0.1:3030/v1/probman/problem/alljoin"
-  )
-  const problems = await resAllJoin.json()
-  
+  );
+  const problems = await resAllJoin.json();
+
   return {
     props: {
       user: user,
       problems: problems.data,
     },
-  }
-})
+  };
+});
 
 export default function ProblemList({ user, problems }) {
   // begin define column
@@ -46,7 +52,7 @@ export default function ProblemList({ user, problems }) {
       {
         Header: "No.",
         Cell: (row) => {
-          return <div>{Number(row.row.id) + 1}</div>
+          return <div>{Number(row.row.id) + 1}</div>;
         },
       },
       {
@@ -56,13 +62,15 @@ export default function ProblemList({ user, problems }) {
           return (
             <>
               <div style={{ textAlign: "-webkit-center" }}>
-                <PriorityArrow value={props.row.original.priorityMatrix.mapping} />
-                <SourcePill value={props.row.original.rootCause.source} />
+                <PriorityArrow
+                  value={props.row.original.priorityMatrix.mapping}
+                />
+                <SourcePill value={props.row.original.sourceProblem} />
               </div>
             </>
-          )
+          );
         },
-        disableSortBy: true
+        disableSortBy: true,
       },
       {
         Header: "Problem Name",
@@ -72,21 +80,27 @@ export default function ProblemList({ user, problems }) {
             <>
               <div className="text-sm text-gray-500">
                 <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                  {props.row.original.incident
-                    ? props.row.original.incident.incidentNumber
-                    : "Tidak ada Incident"}
+                  {props.row.original.multipleIncident == "N"
+                    ? props.row.original.incidents.incidentNumber
+                    : "Multiple Incident"}
                 </a>
-                {` | PR-${props.row.original.id}-${format(new Date(props.row.original.createdAt), "MMddyy")}`}
+                {` | PR-${props.row.original.id}-${format(
+                  new Date(props.row.original.createdAt),
+                  "MMddyy"
+                )}`}
               </div>
               <div className="text-base text-gray-900">
                 {props.row.original.problemName}
               </div>
               <div className="text-xs text-gray-500">
-                {format(new Date(props.row.original.createdAt), "d LLLL yyyy hh:mm")}
+                {format(
+                  new Date(props.row.original.createdAt),
+                  "d LLLL yyyy hh:mm"
+                )}
               </div>
             </>
-          )
-        }
+          );
+        },
       },
       {
         Header: "Status",
@@ -98,25 +112,27 @@ export default function ProblemList({ user, problems }) {
             <div>
               <StatusPill value={props.row.original.status} />
               <br />
-              {props.row.original.incident.incidentNumber}
+              {props.row.original.incidents.incidentNumber}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         Header: "Followup By",
-        accessor: "user.fullName",
+        accessor: "updated_by.userName",
         Cell: (props) => {
           return (
             <div className="text-sm text-gray-900">
-              {props.row.original.user.fullName ? props.row.original.user.fullName : props.row.original.user.userName}
+              {props.row.original.updated_by
+                ? props.row.original.updated_by.fullName
+                : null}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         Header: "Latest Progress",
-        Cell: "Get Latest Nich"
+        Cell: "Get Latest Nich",
       },
       {
         Header: "Detail",
@@ -135,12 +151,12 @@ export default function ProblemList({ user, problems }) {
                 </a>
               </div>
             </>
-          )
-        }
-      }
+          );
+        },
+      },
     ],
     []
-  )
+  );
   // end of define table
 
   return (
@@ -162,12 +178,10 @@ export default function ProblemList({ user, problems }) {
                 initials={<DocumentAddIcon className="w-6 h-6" />}
                 title="Draft and Unassigned"
                 desc={`${
-                  problems.filter((status) => status.status === "Draft")
-                    .length
+                  problems.filter((status) => status.status === "Draft").length
                 } Draft | ${
-                  problems.filter(
-                    (status) => status.status === "Unassigned"
-                  ).length
+                  problems.filter((status) => status.status === "Unassigned")
+                    .length
                 } Unassigned`}
               />
               <CardHeader
@@ -177,16 +191,13 @@ export default function ProblemList({ user, problems }) {
                 initials={<PuzzleIcon className="w-6 h-6" />}
                 title="Ongoing RCA"
                 desc={`${
-                  problems.filter(
-                    (status) => status.status === "Analyzing RCA"
-                  ).length +
-                  problems.filter(
-                    (status) => status.status === "Approval RCA"
-                  ).length
+                  problems.filter((status) => status.status === "Analyzing RCA")
+                    .length +
+                  problems.filter((status) => status.status === "Approval RCA")
+                    .length
                 } Ongoing | ${
-                  problems.filter(
-                    (status) => status.status === "Revising RCA"
-                  ).length
+                  problems.filter((status) => status.status === "Revising RCA")
+                    .length
                 } Revising`}
               />
               <CardHeader
@@ -234,5 +245,5 @@ export default function ProblemList({ user, problems }) {
         </section>
       </Layout>
     </>
-  )
+  );
 }

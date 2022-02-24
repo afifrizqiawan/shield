@@ -35,20 +35,28 @@ const PriorityArrow = ({ value }) => {
 const SourcePill = ({ value }) => {
   const source = value ? value.toLowerCase() : "-";
 
-  return source.startsWith("incident") ? (
+  return source.startsWith("im") ? (
     <span className="px-2 text-xs font-semibold rounded-full bg-red-100 text-gray-800">
       {value}
     </span>
-  ) : source.startsWith("problem") ? (
+  ) : source.startsWith("insiden berulang") ? (
     <span className="px-2 text-xs font-semibold rounded-full bg-yellow-100 text-gray-800">
       {value}
     </span>
-  ) : source.startsWith("healthcheck") ? (
+  ) : source.startsWith("hc") ? (
     <span className="px-2 text-xs font-semibold rounded-full bg-green-100 text-gray-800">
       {value}
     </span>
-  ) : (
+  ) : source.startsWith("proactive") ? (
+    <span className="px-2 text-xs font-semibold rounded-full bg-blue-100 text-gray-800">
+      {value}
+    </span>
+  ) : source.startsWith("deep") ? (
     <span className="px-2 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+      {value}
+    </span>
+  ) : (
+    <span className="px-2 text-xs font-semibold rounded-full bg-black-100 text-gray-800">
       Others
     </span>
   );

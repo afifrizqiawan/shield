@@ -16,7 +16,7 @@ function SelectFilterIncidents() {
         const selectValue = result.data.map((data) => ({
           id: data.id,
           value: data.id,
-          label: `${data.incidentNumber} . ${data.incidentName}`,
+          label: `${data.incidentName}`,
         }))
 
         setOptions(selectValue)
@@ -31,7 +31,6 @@ function SelectFilterIncidents() {
   const handleOnchange = (chosenValue) => {
     const item = chosenValue === null ? "" : chosenValue // untuk menghandle nilai null
     setIncident(item)
-    // setFilter(item.value || undefined)
   }
 
   // custom style untuk menghilangkan outline pada saat search input
